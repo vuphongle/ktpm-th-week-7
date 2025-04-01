@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - voting_network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - "5001:5001"
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - voting_network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - voting_network
+
+  worker:
+    build:
+      context: ./worker
+    container_name: worker
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - voting_network
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: votes
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - voting_network
+
+networks:
+  voting_network:
+    driver: bridge
