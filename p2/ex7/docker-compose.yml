@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mongo:
+    image: mongo:latest             # Sử dụng image MongoDB chính thức từ Docker Hub
+    ports:
+      - "27017:27017"               # Ánh xạ cổng 27017 của container với cổng 27017 của máy host
+    volumes:
+      - mongo-data:/data/db         # Lưu trữ dữ liệu MongoDB vào volume
+
+  mongo-express:
+    image: mongo-express:latest     # Sử dụng image Mongo Express chính thức từ Docker Hub
+    ports:
+      - "8081:8081"                 # Ánh xạ cổng 8081 của máy host với cổng 8081 của container
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo   # Địa chỉ MongoDB container (tên dịch vụ trong Docker Compose)
+      ME_CONFIG_MONGODB_PORT: 27017    # Cổng MongoDB
+    depends_on:
+      - mongo                           # Đảm bảo MongoDB chạy trước Mongo Express
+
+volumes:
+  mongo-data:                          # Định nghĩa volume lưu trữ dữ liệu MongoDB
