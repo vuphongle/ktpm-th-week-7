@@ -1,0 +1,23 @@
+version: '3'
+services:
+  node-app:
+    build: .
+    ports:
+      - "3000:3000"        # Ánh xạ cổng 3000 của máy host với cổng 3000 của container
+    depends_on:
+      - mysql               # Đảm bảo MySQL chạy trước khi Node.js bắt đầu
+
+  mysql:
+    image: mysql:8.0        # Sử dụng MySQL phiên bản 8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Mật khẩu cho root MySQL
+      MYSQL_USER: user                # Tên người dùng MySQL
+      MYSQL_PASSWORD: password        # Mật khẩu cho người dùng MySQL
+      MYSQL_DATABASE: mydb            # Tên database sẽ được tạo cho ứng dụng Node.js
+    ports:
+      - "3306:3306"                  # Ánh xạ cổng 3306 của MySQL với máy host
+    volumes:
+      - mysql-data:/var/lib/mysql    # Lưu trữ dữ liệu MySQL
+
+volumes:
+  mysql-data:                         # Định nghĩa volume lưu trữ dữ liệu MySQL
