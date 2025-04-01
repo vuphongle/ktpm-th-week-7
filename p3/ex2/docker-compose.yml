@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  nodeapp:
+    build: .
+    ports:
+      - "3000:3000"   # Cổng của Node.js ứng dụng
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]  # Kiểm tra ứng dụng Node.js có sẵn sàng không
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 30s
+    networks:
+      - app_network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"   # Cổng MongoDB
+    volumes:
+      - mongo_data:/data/db   # Volume cho dữ liệu MongoDB
+    networks:
+      - app_network
+
+volumes:
+  mongo_data:
+
+networks:
+  app_network:
+    driver: bridge
