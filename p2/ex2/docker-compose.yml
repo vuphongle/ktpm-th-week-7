@@ -1,0 +1,15 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Mật khẩu cho tài khoản root
+      MYSQL_USER: user                  # Username cho MySQL
+      MYSQL_PASSWORD: password          # Mật khẩu cho user
+      MYSQL_DATABASE: mydb              # Tên database
+    ports:
+      - "3306:3306"                      # Ánh xạ cổng 3306 của container với cổng 3306 của máy host
+    volumes:
+      - mysql-data:/var/lib/mysql       # Lưu dữ liệu vào volume để bảo vệ dữ liệu khi container bị xóa
+volumes:
+  mysql-data:                           # Định nghĩa volume lưu trữ dữ liệu MySQL
