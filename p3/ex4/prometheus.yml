@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s  # Lấy dữ liệu mỗi 15 giây
+
+scrape_configs:
+  - job_name: 'docker'
+    static_configs:
+      - targets: ['docker:9323']  # Docker Exporter sẽ lắng nghe tại cổng 9323

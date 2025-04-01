@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"  # Mở port 9090 cho Prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Đưa tệp cấu hình vào container
+      - prometheus_data:/prometheus  # Volume lưu trữ dữ liệu Prometheus
+    networks:
+      - monitoring_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Mở port 3000 cho Grafana
+    volumes:
+      - grafana_data:/var/lib/grafana  # Volume lưu trữ dữ liệu Grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Mật khẩu mặc định cho tài khoản admin
+    depends_on:
+      - prometheus
+    networks:
+      - monitoring_network
+
+  docker_exporter:
+    image: prom/prometheus:latest   # Sử dụng image đúng từ Prometheus
+    container_name: docker_exporter
+    ports:
+      - "9323:9323"  # Mở cổng 9323 cho Docker Exporter
+    networks:
+      - monitoring_network
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  monitoring_network:
+    driver: bridge
