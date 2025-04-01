@@ -1,0 +1,10 @@
+version: '3'
+services:
+  node-app:
+    build: .
+    ports:
+      - "3000:3000"  # Ánh xạ cổng 3000 của máy host với cổng 3000 trong container
+    volumes:
+      - .:/usr/src/app  # Để có thể chỉnh sửa mã nguồn trực tiếp mà không cần rebuild lại container
+    environment:
+      - NODE_ENV=development
