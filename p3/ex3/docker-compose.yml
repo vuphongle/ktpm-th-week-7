@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  flask1:
+    build: .
+    container_name: flask1
+    ports:
+      - "5001:5000"  # Mở port 5001 cho Flask 1
+    networks:
+      - app_network
+
+  flask2:
+    build: .
+    container_name: flask2
+    ports:
+      - "5002:5000"  # Mở port 5002 cho Flask 2
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:8080"  # Mở port 8080 cho Nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Chèn cấu hình Nginx từ file
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
