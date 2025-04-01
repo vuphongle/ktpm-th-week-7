@@ -1,0 +1,11 @@
+version: '3'
+services:
+  redis:
+    image: redis:latest        # Sử dụng Redis image chính thức từ Docker Hub
+    ports:
+      - "6379:6379"            # Ánh xạ cổng 6379 của container với cổng 6379 của máy host
+    volumes:
+      - redis-data:/data       # Sử dụng volume để lưu trữ dữ liệu Redis
+    
+volumes:
+  redis-data:                   # Định nghĩa volume lưu trữ dữ liệu Redis
