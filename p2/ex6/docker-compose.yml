@@ -1,0 +1,27 @@
+version: '3'
+services:
+  wordpress:
+    image: wordpress:latest         # Sử dụng image chính thức của WordPress
+    ports:
+      - "8080:80"                    # Ánh xạ cổng 8080 của máy host với cổng 80 của container
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306  # Kết nối đến MySQL container
+      WORDPRESS_DB_NAME: wordpress   # Tên database WordPress
+      WORDPRESS_DB_USER: user        # Tên người dùng MySQL
+      WORDPRESS_DB_PASSWORD: password# Mật khẩu của người dùng MySQL
+    volumes:
+      - wordpress-data:/var/www/html # Lưu trữ dữ liệu của WordPress
+
+  mysql:
+    image: mysql:5.7                 # Sử dụng MySQL phiên bản 5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Mật khẩu cho root MySQL
+      MYSQL_DATABASE: wordpress         # Tên database sẽ được tạo cho WordPress
+      MYSQL_USER: user                  # Tên người dùng MySQL
+      MYSQL_PASSWORD: password          # Mật khẩu cho người dùng MySQL
+    volumes:
+      - mysql-data:/var/lib/mysql       # Lưu trữ dữ liệu MySQL
+
+volumes:
+  wordpress-data:                   # Định nghĩa volume lưu trữ dữ liệu của WordPress
+  mysql-data:                        # Định nghĩa volume lưu trữ dữ liệu của MySQL
